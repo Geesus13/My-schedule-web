@@ -59,13 +59,58 @@
             color: white;
             border: none;
         }
+        .switch input {
+            display: none;
+        }
+        
+        .switch {
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            position: relative;
+            cursor: pointer;
+        }
+        .switch-track {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            border-radius: 34px;
+            transition: background-color 0.4s ease;
+        }
+        .switch-thumb {
+            position: absolute;
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        #theme-switch:checked + .switch-track {
+            background-color: #4CAF50;
+        }
+        
+        #theme-switch:checked + .switch-track .switch-thumb {
+            transform: translateX(26px);
+        }
     </style>
 </head>
 <body>
 
     <h1>📅 ระบบจัดตารางเรียน</h1>
     
-    <button id="theme-toggle">สลับโหมด มืด/สว่าง</button>
+<label class="switch">
+    <input type="checkbox" id="theme-switch">
+    <span class="switch-track">
+        <span class="switch-thumb">☀️</span>
+    </span>
+</label>
 
     <hr>
 
