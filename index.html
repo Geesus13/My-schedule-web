@@ -1,28 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-    <title>ตารางเรียนของฉัน</title>
+    <meta charset="UTF-8">
+    <title>ระบบจัดตารางเรียนของฉัน</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .form-container {
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            margin: 5px;
+            padding: 8px;
+            background-color: #333;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #ff9800;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #000000;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: center;
+            min-width: 80px;
+        }
+        th {
+            background-color: #1f1f1f;
+        }
+        .day-label {
+            font-weight: bold;
+            background-color: #1f1f1f;
+        }
+    </style>
 </head>
 <body>
-    <h1>ระบบจัดตารางเรียน</h1>
+
+    <h1>📅 ระบบจัดตารางเรียน</h1>
     
-    <input type="text" placeholder="ชื่อวิชา">
-    <input type="time"> ถึง <input type="time">
-    <button>เพิ่มวิชา</button>
+    <button id="theme-toggle">สลับโหมด มืด/สว่าง</button>
 
     <hr>
 
-    <table border="1">
-        <tr>
-            <th>วัน / เวลา</th>
-            <th>09:00 - 12:00</th>
-            <th>13:00 - 16:00</th>
-        </tr>
-        <tr>
-            <td>จันทร์</td>
-            <td>Python 101</td>
-            <td>ว่าง</td>
-        </tr>
+    <div class="form-container">
+        <h3>➕ เพิ่มวิชาเรียนใหม่</h3>
+        <input type="text" placeholder="รหัสวิชา (เช่น 03760231-64)">
+        <input type="text" placeholder="ชื่อวิชา (เช่น Principles of Cost Accounting)">
+        <br>
+        <label>เวลาเรียน:</label>
+        <input type="time"> ถึง <input type="time">
+        <br>
+        <input type="text" placeholder="สถานที่เรียน (เช่น LH2-203)">
+        <input type="text" placeholder="หมู่เรียน (เช่น Lecture 700)">
+        
+        <select>
+            <option value="lecture">📖 Lecture (ทฤษฎี)</option>
+            <option value="laboratory">🧪 Laboratory (ปฏิบัติ)</option>
+        </select>
+        
+        <button type="button">เพิ่มลงตาราง</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Day/Time</th>
+                <th>08:00</th>
+                <th>09:00</th>
+                <th>10:00</th>
+                <th>11:00</th>
+                <th>12:00</th>
+                <th>13:00</th>
+                <th>14:00</th>
+                <th>15:00</th>
+                <th>16:00</th>
+                <th>17:00</th>
+                <th>18:00</th>
+                <th>19:00</th>
+                <th>20:00</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="day-label" style="color: #fff176;">MON</td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td class="day-label" style="color: #f06292;">TUE</td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td class="day-label" style="color: #81c784;">WED</td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td class="day-label" style="color: #ffb74d;">THU</td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td class="day-label" style="color: #64b5f6;">FRI</td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td class="day-label" style="color: #ba68c8;">SAT</td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td class="day-label" style="color: #e57373;">SUN</td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+        </tbody>
     </table>
+
 </body>
 </html>
