@@ -64,24 +64,26 @@
 
     <hr>
 
-    <div class="form-container">
-        <h3>➕ เพิ่มวิชาเรียนใหม่</h3>
-        <input type="text" placeholder="รหัสวิชา (เช่น 03760231-64)">
-        <input type="text" placeholder="ชื่อวิชา (เช่น Principles of Cost Accounting)">
-        <br>
-        <label>เวลาเรียน:</label>
-        <input type="time"> ถึง <input type="time">
-        <br>
-        <input type="text" placeholder="สถานที่เรียน (เช่น LH2-203)">
-        <input type="text" placeholder="หมู่เรียน (เช่น Lecture 700)">
-        
-        <select>
-            <option value="lecture">📖 Lecture (ทฤษฎี)</option>
-            <option value="laboratory">🧪 Laboratory (ปฏิบัติ)</option>
-        </select>
-        
-        <button type="button">เพิ่มลงตาราง</button>
+<div style="text-align: right;">
+    <button id="lang-toggle">TH | EN</button>
+</div>
+
+<div class="form-container">
+    <h3>➕ เพิ่มวิชาเรียน / Add Course</h3>
+    
+    <div style="margin-bottom: 15px;">
+        <label><input type="radio" name="add-method" checked> กรอกข้อมูลเอง (Manual)</label>
+        <label><input type="radio" name="add-method"> อัปโหลด PDF / วางข้อความ (Auto)</label>
     </div>
+
+    <div id="auto-input-section" style="margin-top: 10px; padding: 10px; border: 1px dashed #555;">
+        <p>วิธีที่ 1: ลากไฟล์ PDF ตารางเรียนมาวางที่นี่</p>
+        <input type="file" accept=".pdf">
+        
+        <p style="margin-top: 10px;">วิธีที่ 2: ก๊อปปี้ข้อความตารางเรียนจากเว็บมหาลัยมาวางในกล่องนี้</p>
+        <textarea rows="4" cols="50" placeholder="วางข้อความที่ก๊อปปี้มาที่นี่... (Paste your schedule text here)" style="background-color: #333; color: white; width: 100%; box-sizing: border-box;"></textarea>
+    </div>
+</div>
 
     <table>
         <thead>
