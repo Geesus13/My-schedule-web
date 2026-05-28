@@ -99,6 +99,21 @@
         #theme-switch:checked + .switch-track .switch-thumb {
             transform: translateX(26px);
         }
+        body {
+            background-color: #ffffff;
+            color: #121212;
+            font-family: 'Karla', sans-serif;
+            padding: 20px;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+        
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        body.dark-mode .form-container {
+            background-color: #1e1e1e;
+        }
     </style>
 </head>
 <body>
@@ -185,6 +200,21 @@
             </tr>
         </tbody>
     </table>
+<script>
+    const themeSwitch = document.getElementById('theme-switch');
 
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        
+        const thumb = document.querySelector('.switch-thumb');
+        if (themeSwitch.checked) {
+            thumb.innerText = "🌙";
+        } else {
+            thumb.innerText = "☀️";
+        }
+    }
+
+    themeSwitch.addEventListener('change', toggleTheme);
+</script>
 </body>
 </html>
