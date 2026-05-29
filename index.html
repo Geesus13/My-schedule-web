@@ -207,21 +207,20 @@
             color: #ffffff;
         }
 
-        /* 🌟 ปรับปรุง: สี่เหลี่ยมมุมฉากคมกริบ ขยายขนาดแนบชิดเส้นตาราง ไม่เว้นขอบ */
         .course-card {
             position: absolute;
             top: 0;
             bottom: 0;
             z-index: 10;
             padding: 6px;
-            border-radius: 0px; /* มุมแหลม ไม่มน */
-            font-size: 11px; /* ขนาดตัวอักษรเท่ากันทั้งหมด */
+            border-radius: 0px; 
+            font-size: 11px; 
             line-height: 1.2;
             color: #000000; 
             text-align: left;
             box-sizing: border-box;
             overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.15); /* เส้นขอบคมๆ */
+            border: 1px solid rgba(0, 0, 0, 0.15); 
         }
 
         body.dark-mode .course-card {
@@ -336,10 +335,9 @@
             <input type="text" id="course-room" placeholder="สถานที่เรียน / Location">
             <input type="text" id="course-sec" placeholder="หมู่เรียน / Section">
             
-            <!-- 🌟 ปรับปรุง: ตัวเลือกรูปแบบการเรียนที่จะถูกล้างและเปลี่ยนคำแปลอัตโนมัติตามภาษาหลักด้านล่าง -->
             <select id="course-type">
-                <option value="Lecture" class="lang-th-option">📖 Lecture (ทฤษฎี)</option>
-                <option value="Laboratory" class="lang-th-option">🧪 Laboratory (ปฏิบัติ)</option>
+                <option value="Lecture">📖 Lecture (ทฤษฎี)</option>
+                <option value="Laboratory">🧪 Laboratory (ปฏิบัติ)</option>
             </select>
             <br>
             <button type="button" class="btn-manual" onclick="addCourseToTable()">
@@ -349,21 +347,14 @@
         </div>
 
         <div id="auto-input-section" style="display: none;">
-            <p>
-                <span class="lang-th">วิธีที่ 1: ลากไฟล์ PDF ตารางเรียนมาวางที่นี่</span>
-                <span class="lang-en">Method 1: Drag and drop your schedule PDF here</span>
+            <p style="color: #666; font-size: 13px;">
+                💡 <strong>วิธีใช้สำหรับไอแพด/คอมฯ:</strong> เปิดตารางเรียนมหาลัย หรือไฟล์ PDF แล้วกดครอบคลุมคัดลอกข้อความทั้งหมด (Select All -> Copy) จากนั้นเอามาวางในกล่องข้างล่างนี้แล้วกดปุ่มได้เลยครับ
             </p>
-            <input type="file" accept=".pdf">
-            
-            <p style="margin-top: 15px;">
-                <span class="lang-th">วิธีที่ 2: ก๊อปปี้ข้อความตารางเรียนจากเว็บมหาลัยมาวางในกล่องนี้</span>
-                <span class="lang-en">Method 2: Copy and paste your schedule text here</span>
-            </p>
-            <textarea rows="4" placeholder="วางข้อความที่นี่... / Paste text here..." style="width: 100%; box-sizing: border-box; font-family: 'Karla', sans-serif;"></textarea>
+            <textarea id="auto-paste-box" rows="6" placeholder="วางข้อความตารางเรียนที่ก๊อปปี้มาที่นี่... / Paste your schedule text here..." style="width: 100%; box-sizing: border-box; font-family: 'Karla', sans-serif;"></textarea>
             <br>
-            <button type="button" class="btn-auto">
-                <span class="lang-th">ประมวลผลตารางเรียนอัตโนมัติ</span>
-                <span class="lang-en">Process Schedule Automatically</span>
+            <button type="button" class="btn-auto" onclick="processAutoTextSchedule()">
+                <span class="lang-th">✨ ประมวลผลตารางเรียนอัตโนมัติ</span>
+                <span class="lang-en">✨ Process Schedule Automatically</span>
             </button>
         </div>
     </div>
@@ -440,14 +431,12 @@
             }
         }
 
-        // 🌟 ปรับปรุง: อัปเดตภาษาของตัวเลือกประเภทเรียนให้เปลี่ยนตามโหมดภาษาด้วย
         const langToggle = document.getElementById('lang-toggle');
         const courseTypeSelect = document.getElementById('course-type');
         
         langToggle.addEventListener('click', () => {
             document.body.classList.toggle('en');
             const isEn = document.body.classList.contains('en');
-            
             if (isEn) {
                 courseTypeSelect.options[0].text = "📖 Lecture";
                 courseTypeSelect.options[1].text = "🧪 Laboratory";
@@ -457,30 +446,13 @@
             }
         });
 
-        function addCourseToTable() {
-            const id = document.getElementById('course-id').value;
-            const name = document.getElementById('course-name').value;
-            const startTime = document.getElementById('course-start-time').value;
-            const endTime = document.getElementById('course-end-time').value;
-            const room = document.getElementById('course-room').value;
-            const sec = document.getElementById('course-sec').value;
-            const selectedType = document.getElementById('course-type').value;
-            
-            if (!id || !name) {
-                alert("กรุณากรอกรหัสวิชาและชื่อวิชาด้วยครับ!");
-                return;
-            }
+        function timeToMinutes(timeStr) {
+            const parts = timeStr.split(':');
+            return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+        }
 
-            const checkedDays = [];
-            const dayCheckboxes = document.querySelectorAll('.day-checkbox-group input:checked');
-            dayCheckboxes.forEach(cb => checkedDays.push(cb.value));
-
-            if (checkedDays.length === 0) {
-                alert("กรุณาเลือกวันเรียนอย่างน้อย 1 วันครับ!");
-                return;
-            }
-
-            // 🌟 ปรับปรุง: แปลงตัวย่อ 3 ตัวแรกสำหรับ ENG (LEC / LAB) และภาษาไทย (ทฤษฎี / ปฏิบัติ) ตามสถานะภาษาขณะกดปุ่ม
+        // 🌟 ฟังก์ชันแกนหลักในการวาดกล่องวิชาลงบนพิกัดตาราง
+        function createCardOnTable(id, name, startTime, endTime, room, sec, selectedType, checkedDays) {
             const isEnMode = document.body.classList.contains('en');
             let typeDisplay = "";
             if (isEnMode) {
@@ -489,30 +461,19 @@
                 typeDisplay = (selectedType === "Lecture") ? "ทฤษฎี" : "ปฏิบัติ";
             }
 
-            function timeToMinutes(timeStr) {
-                const parts = timeStr.split(':');
-                return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
-            }
-
             const startTotalMinutes = timeToMinutes(startTime);
             const endTotalMinutes = timeToMinutes(endTime);
             const tableStartMinutes = 8 * 60; 
             const totalTableHours = 13;      
 
-            if (startTotalMinutes < tableStartMinutes || endTotalMinutes > (21 * 60)) {
-                alert("เวลาเรียนต้องอยู่ภายในช่วง 08:00 - 21:00 น. ครับ");
-                return;
-            }
-            if (endTotalMinutes <= startTotalMinutes) {
-                alert("เวลาเลิกเรียนต้องอยู่หลังเวลาเริ่มเรียนนะครับ");
-                return;
+            if (startTotalMinutes < tableStartMinutes || endTotalMinutes > (21 * 60) || endTotalMinutes <= startTotalMinutes) {
+                return; // ข้ามข้อมูลที่เวลาผิดพลาดหรือไม่ถูกต้อง
             }
 
             const minutesInTable = totalTableHours * 60; 
             const startOffsetMinutes = startTotalMinutes - tableStartMinutes;
             const durationMinutes = endTotalMinutes - startTotalMinutes;
 
-            // คำนวณพิกัดให้ชนชิดเส้นตารางพอดี (ปรับระยะ left และ width ให้เรียบเนียนสนิท)
             const leftPercent = 10 + (startOffsetMinutes / minutesInTable) * 90;
             const widthPercent = (durationMinutes / minutesInTable) * 90;
 
@@ -529,13 +490,11 @@
                 courseCard.className = 'course-card';
                 courseCard.classList.add(`day-${day.toLowerCase()}`);
                 
-                // ตั้งค่าขนาดชิดขอบตาราง 100% ไม่หลงเหลือช่องว่างสีขาวรอบกล่องวิชา
                 courseCard.style.left = `${leftPercent}%`;
                 courseCard.style.width = `${widthPercent}%`;
                 courseCard.style.top = `${rowTop}px`;
                 courseCard.style.height = `${rowHeight}px`;
 
-                // 🌟 ปรับปรุง: การจัดเรียงโครงสร้างข้อความ และขนาดอักษรเท่ากันเป๊ะตามบรีฟใหม่ของคุณ
                 courseCard.innerHTML = `
                     <div>[${startTime}-${endTime}]</div>
                     <div>${id}</div>
@@ -553,13 +512,126 @@
 
                 container.appendChild(courseCard);
             });
+        }
 
-            // ล้างฟอร์มเคลียร์ค่า
+        // ฟังก์ชันเมื่อกดปุ่มกรอกเองแบบแมนนวล
+        function addCourseToTable() {
+            const id = document.getElementById('course-id').value;
+            const name = document.getElementById('course-name').value;
+            const startTime = document.getElementById('course-start-time').value;
+            const endTime = document.getElementById('course-end-time').value;
+            const room = document.getElementById('course-room').value || "-";
+            const sec = document.getElementById('course-sec').value || "-";
+            const selectedType = document.getElementById('course-type').value;
+            
+            if (!id || !name) {
+                alert("กรุณากรอกรหัสวิชาและชื่อวิชาด้วยครับ!");
+                return;
+            }
+
+            const checkedDays = [];
+            const dayCheckboxes = document.querySelectorAll('.day-checkbox-group input:checked');
+            dayCheckboxes.forEach(cb => checkedDays.push(cb.value));
+
+            if (checkedDays.length === 0) {
+                alert("กรุณาเลือกวันเรียนอย่างน้อย 1 วันครับ!");
+                return;
+            }
+
+            createCardOnTable(id, name, startTime, endTime, room, sec, selectedType, checkedDays);
+
+            // ล้างฟอร์มแมนนวล
             document.getElementById('course-id').value = '';
             document.getElementById('course-name').value = '';
             document.getElementById('course-room').value = '';
             document.getElementById('course-sec').value = '';
             dayCheckboxes.forEach(cb => cb.checked = false);
+        }
+
+        // 🌟 🤖 ใหม่ล่าสุด: ระบบวิเคราะห์แสกนข้อความตารางเรียนดิบโดยตรงอัตโนมัติบนเบราว์เซอร์
+        function processAutoTextSchedule() {
+            const rawText = document.getElementById('auto-paste-box').value;
+            if (!rawText.trim()) {
+                alert("กรุณาวางข้อความตารางเรียนก่อนครับ!");
+                return;
+            }
+
+            // แยกข้อความก๊อปปี้ออกเป็นบรรทัดๆ เพื่อสแกนค้นหาข้อมูลวิชา
+            const lines = rawText.split('\n');
+            let detectedCount = 0;
+
+            // คลังแมปปิ้งคำสำคัญเพื่อแปลงตัวย่อวัน
+            const dayMap = {
+                'MON': 'MON', 'จันทร์': 'MON', 'จ.': 'MON',
+                'TUE': 'TUE', 'อังคาร': 'TUE', 'อ.': 'TUE',
+                'WED': 'WED', 'พุธ': 'WED', 'พ.': 'WED',
+                'THU': 'THU', 'พฤหัส': 'THU', 'พฤหัสฯ': 'THU', 'พฤ.': 'THU',
+                'FRI': 'FRI', 'ศุกร์': 'FRI', 'ศ.': 'FRI',
+                'SAT': 'SAT', 'เสาร์': 'SAT', 'ส.': 'SAT',
+                'SUN': 'SUN', 'อาทิตย์': 'SUN', 'อา.': 'SUN'
+            };
+
+            lines.forEach(line => {
+                if (!line.trim()) return;
+
+                // 1. ตรวจสอบค้นหา Pattern ช่วงเวลา เช่น 08:30 - 11:30 หรือ 13.00-16.00
+                const timeRegex = /(\d{1,2}[:.]\d{2})\s*[-–]\s*(\d{1,2}[:.]\d{2})/;
+                const timeMatch = line.match(timeRegex);
+
+                // 2. ตรวจสอบค้นหา Pattern ชื่อวัน
+                let detectedDay = null;
+                for (let key in dayMap) {
+                    if (new RegExp('\\b' + key + '\\b|' + key, 'i').test(line)) {
+                        detectedDay = dayMap[key];
+                        break;
+                    }
+                }
+
+                if (timeMatch && detectedDay) {
+                    let startTime = timeMatch[1].replace('.', ':');
+                    let endTime = timeMatch[2].replace('.', ':');
+                    
+                    // บังคับให้อยู่ในฟอร์แมตเลขสองหลักหลักหน้า (เช่น 8:30 -> 08:30)
+                    if(startTime.split(':')[0].length === 1) startTime = '0' + startTime;
+                    if(endTime.split(':')[0].length === 1) endTime = '0' + endTime;
+
+                    // 3. ตรวจสอบแสกนหารหัสวิชา (ตัวเลขหรือตัวอักษรติดต่อกัน 5-8 ตัว)
+                    const idRegex = /\b([A-Z0-9]{5,8})\b/i;
+                    const idMatch = line.match(idRegex);
+                    const courseId = idMatch ? idMatch[1] : "COURSE";
+
+                    // 4. พยายามเดาชื่อวิชา (ถ้าแกะยาก เราตั้งชื่อวิชาดีฟอลต์ไว้ให้ก่อนเพื่อให้แสดงผลได้)
+                    let courseName = "Auto Detected";
+                    // ลองลบข้อมูลเวลาและรหัสวิชาออกเพื่อหาข้อความชื่อวิชาที่เหลืออยู่
+                    let cleanName = line.replace(timeRegex, '').replace(idRegex, '').replace(/MON|TUE|WED|THU|FRI|SAT|SUN|จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์|อาทิตย์/gi, '').trim();
+                    if(cleanName.length > 2) {
+                        // ตัดคำสั้นๆ ทิ้ง เอาเฉพาะข้อความที่คาดว่าจะเป็นชื่อวิชา
+                        courseName = cleanName.split('|')[0].split(',')[0].trim().substring(0, 25);
+                    }
+
+                    // 5. สแกนหาคำว่า Sec หรือหมู่เรียน
+                    const secRegex = /\b(?:sec|หมู่|หมู่เรียน)\s*:?\s*(\d+)\b/i;
+                    const secMatch = line.match(secRegex);
+                    const sec = secMatch ? secMatch[1] : "1";
+
+                    // 6. เดาประเภทวิชาจากคีย์เวิร์ด
+                    let courseType = "Lecture";
+                    if(/lab|ปฏิบัติ|🧪/i.test(line)) {
+                        courseType = "Laboratory";
+                    }
+
+                    // วาดวิชานั้นลงตารางทันที
+                    createCardOnTable(courseId, courseName, startTime, endTime, "ห้องเรียน", sec, courseType, [detectedDay]);
+                    detectedCount++;
+                }
+            });
+
+            if (detectedCount > 0) {
+                alert(`🎉 ประมวลผลเสร็จสิ้น! พบข้อมูลวิชาเรียนทั้งหมด ${detectedCount} คาบ และเพิ่มลงตารางให้เรียบร้อยแล้วครับ`);
+                document.getElementById('auto-paste-box').value = ''; // เคลียร์กล่องข้อความ
+            } else {
+                alert("❌ ระบบไม่พบรูปแบบ วัน และ เวลาเรียนในข้อความที่วางเลยครับ กรุณาตรวจสอบว่าข้อมูลครอบคลุมรูปแบบเวลาเรียน (เช่น 09:30-12:30) แล้วหรือยังนะครับ");
+            }
         }
     </script>        
 </body>
