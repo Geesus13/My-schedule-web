@@ -77,7 +77,7 @@
             border: 1px solid #e0e0e0;
             padding: 0;
             text-align: center;
-            height: 95px; /* เพิ่มความสูงขึ้นเล็กน้อยเพื่อให้แสดงข้อความที่เว้นบรรทัดได้ครบถ้วน */
+            height: 85px; 
             position: relative;
             transition: all 0.4s ease;
         }
@@ -197,24 +197,35 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
         }
+        
+        body.dark-mode .btn-manual, body.dark-mode .btn-auto {
+            background-color: #4CAF50;
+            color: #000000;
+        }
+        body.dark-mode .btn-manual:hover, body.dark-mode .btn-auto:hover {
+            background-color: #388E3C;
+            color: #ffffff;
+        }
 
-        /* 🌟 ปรับปรุง: เปลี่ยนเป็นสี่เหลี่ยมมุมแหลม (border-radius: 0) และตั้งค่าฟอนต์ข้างในให้เท่ากันทั้งหมด */
+        /* 🌟 ปรับปรุง: สี่เหลี่ยมมุมฉากคมกริบ ขยายขนาดแนบชิดเส้นตาราง ไม่เว้นขอบ */
         .course-card {
             position: absolute;
-            top: 4px;
-            bottom: 4px;
+            top: 0;
+            bottom: 0;
             z-index: 10;
             padding: 6px;
-            border-radius: 0px; /* 📐 มุมแหลมปกติ ไม่มนเลย */
-            font-size: 11px;    /* 📐 ขนาดตัวอักษรเท่ากันทั้งหมด */
-            font-weight: bold;
-            line-height: 1.4;
+            border-radius: 0px; /* มุมแหลม ไม่มน */
+            font-size: 11px; /* ขนาดตัวอักษรเท่ากันทั้งหมด */
+            line-height: 1.2;
             color: #000000; 
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
             text-align: left;
             box-sizing: border-box;
             overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.1);
+            border: 1px solid rgba(0, 0, 0, 0.15); /* เส้นขอบคมๆ */
+        }
+
+        body.dark-mode .course-card {
+            color: #000000;
         }
 
         .day-checkbox-group {
@@ -325,9 +336,10 @@
             <input type="text" id="course-room" placeholder="สถานที่เรียน / Location">
             <input type="text" id="course-sec" placeholder="หมู่เรียน / Section">
             
+            <!-- 🌟 ปรับปรุง: ตัวเลือกรูปแบบการเรียนที่จะถูกล้างและเปลี่ยนคำแปลอัตโนมัติตามภาษาหลักด้านล่าง -->
             <select id="course-type">
-                <option value="📖 Lecture (ทฤษฎี)">📖 Lecture (ทฤษฎี)</option>
-                <option value="🧪 Laboratory (ปฏิบัติ)">🧪 Laboratory (ปฏิบัติ)</option>
+                <option value="Lecture" class="lang-th-option">📖 Lecture (ทฤษฎี)</option>
+                <option value="Laboratory" class="lang-th-option">🧪 Laboratory (ปฏิบัติ)</option>
             </select>
             <br>
             <button type="button" class="btn-manual" onclick="addCourseToTable()">
@@ -428,9 +440,21 @@
             }
         }
 
+        // 🌟 ปรับปรุง: อัปเดตภาษาของตัวเลือกประเภทเรียนให้เปลี่ยนตามโหมดภาษาด้วย
         const langToggle = document.getElementById('lang-toggle');
+        const courseTypeSelect = document.getElementById('course-type');
+        
         langToggle.addEventListener('click', () => {
             document.body.classList.toggle('en');
+            const isEn = document.body.classList.contains('en');
+            
+            if (isEn) {
+                courseTypeSelect.options[0].text = "📖 Lecture";
+                courseTypeSelect.options[1].text = "🧪 Laboratory";
+            } else {
+                courseTypeSelect.options[0].text = "📖 Lecture (ทฤษฎี)";
+                courseTypeSelect.options[1].text = "🧪 Laboratory (ปฏิบัติ)";
+            }
         });
 
         function addCourseToTable() {
@@ -440,7 +464,7 @@
             const endTime = document.getElementById('course-end-time').value;
             const room = document.getElementById('course-room').value;
             const sec = document.getElementById('course-sec').value;
-            const type = document.getElementById('course-type').value;
+            const selectedType = document.getElementById('course-type').value;
             
             if (!id || !name) {
                 alert("กรุณากรอกรหัสวิชาและชื่อวิชาด้วยครับ!");
@@ -456,6 +480,15 @@
                 return;
             }
 
+            // 🌟 ปรับปรุง: แปลงตัวย่อ 3 ตัวแรกสำหรับ ENG (LEC / LAB) และภาษาไทย (ทฤษฎี / ปฏิบัติ) ตามสถานะภาษาขณะกดปุ่ม
+            const isEnMode = document.body.classList.contains('en');
+            let typeDisplay = "";
+            if (isEnMode) {
+                typeDisplay = (selectedType === "Lecture") ? "LEC" : "LAB";
+            } else {
+                typeDisplay = (selectedType === "Lecture") ? "ทฤษฎี" : "ปฏิบัติ";
+            }
+
             function timeToMinutes(timeStr) {
                 const parts = timeStr.split(':');
                 return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
@@ -467,7 +500,7 @@
             const totalTableHours = 13;      
 
             if (startTotalMinutes < tableStartMinutes || endTotalMinutes > (21 * 60)) {
-                alert("เวลาเรียนต้องอยู่ภายในช่วง 08:00 - 21:00 น. นี้นะครับ");
+                alert("เวลาเรียนต้องอยู่ภายในช่วง 08:00 - 21:00 น. ครับ");
                 return;
             }
             if (endTotalMinutes <= startTotalMinutes) {
@@ -479,6 +512,7 @@
             const startOffsetMinutes = startTotalMinutes - tableStartMinutes;
             const durationMinutes = endTotalMinutes - startTotalMinutes;
 
+            // คำนวณพิกัดให้ชนชิดเส้นตารางพอดี (ปรับระยะ left และ width ให้เรียบเนียนสนิท)
             const leftPercent = 10 + (startOffsetMinutes / minutesInTable) * 90;
             const widthPercent = (durationMinutes / minutesInTable) * 90;
 
@@ -495,23 +529,24 @@
                 courseCard.className = 'course-card';
                 courseCard.classList.add(`day-${day.toLowerCase()}`);
                 
+                // ตั้งค่าขนาดชิดขอบตาราง 100% ไม่หลงเหลือช่องว่างสีขาวรอบกล่องวิชา
                 courseCard.style.left = `${leftPercent}%`;
                 courseCard.style.width = `${widthPercent}%`;
-                courseCard.style.top = `${rowTop + 4}px`;
-                courseCard.style.height = `${rowHeight - 8}px`;
+                courseCard.style.top = `${rowTop}px`;
+                courseCard.style.height = `${rowHeight}px`;
 
-                // 🌟 ปรับปรุงการจัดเรียงข้อความตามดีเทลที่คุณระบุไว้เป๊ะๆ
+                // 🌟 ปรับปรุง: การจัดเรียงโครงสร้างข้อความ และขนาดอักษรเท่ากันเป๊ะตามบรีฟใหม่ของคุณ
                 courseCard.innerHTML = `
                     <div>[${startTime}-${endTime}]</div>
                     <div>${id}</div>
-                    <div style="margin-bottom: 1.4em;"></div>
+                    <div style="height: 14px;"></div>
                     <div>${name}</div>
-                    <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${room} | ${type} | ${sec}</div>
+                    <div>${room} | ${typeDisplay} ${sec}</div>
                 `;
 
                 courseCard.title = "คลิกเพื่อลบวิชานี้";
                 courseCard.onclick = function() {
-                    if(confirm(`ต้องการลบวิชา ${id} ในตารางออกใช่ไหมครับ?`)) {
+                    if(confirm(`ต้องการลบวิชา ${id} ออกจากตารางใช่ไหมครับ?`)) {
                         courseCard.remove();
                     }
                 };
@@ -519,6 +554,7 @@
                 container.appendChild(courseCard);
             });
 
+            // ล้างฟอร์มเคลียร์ค่า
             document.getElementById('course-id').value = '';
             document.getElementById('course-name').value = '';
             document.getElementById('course-room').value = '';
