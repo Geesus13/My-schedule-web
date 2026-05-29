@@ -165,9 +165,9 @@
         body.en .lang-en { display: inline-block; }
         body.en th .lang-en { display: block; }
 
-        .btn-manual {
+        .btn-manual, .btn-auto {
             background-color: #4CAF50;
-            color: #ffffff;
+            color: #000000;
             font-family: 'Karla', sans-serif;
             font-weight: 600;
             font-size: 15px;
@@ -180,28 +180,7 @@
             transition: all 0.3s ease;
         }
 
-       .btn-manual:hover {
-           background-color: #388E3C;
-           transform: translateY(-2px);
-           box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
-       }
-
-        .btn-auto {
-            background-color: #4CAF50;
-            color: #ffffff;
-            font-family: 'Karla', sans-serif;
-            font-weight: 600;
-            font-size: 15px;
-            padding: 10px 20px;
-            margin-top: 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(76, 175, 80, 0.2);
-            transition: all 0.3s ease;
-        }
-
-       .btn-auto:hover {
+       .btn-manual:hover, .btn-auto:hover {
            background-color: #388E3C;
            transform: translateY(-2px);
            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
@@ -210,6 +189,10 @@
         .btn-manual:active, .btn-auto:active {
             transform: translateY(1px);
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        body.dark-mode .btn:-manual, ,btn.auto {
+            background-color: #4CAF50;
+            color: #ffffff;
         }
     </style>
 </head>
