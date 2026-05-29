@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
 
-    <title>ระบบจัดตารางเรียน</title>
+    <title>ระบบจัดตารางเรียนของฉัน</title>
     
     <style>
         body {
@@ -53,6 +53,7 @@
             padding: 8px 12px;
             border-radius: 4px;
             cursor: pointer;
+            font-family: 'Prompt', sans-serif;
         }
 
         table {
@@ -77,7 +78,6 @@
             color: #333333;
         }
 
-       
         .day-label { font-weight: bold; text-align: center; }
         .day-mon { background-color: #fff9c4; color: #000000; }
         .day-tue { background-color: #f8bbd0; color: #000000; }
@@ -111,9 +111,8 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 14px;
         }
-        #theme-switch:checked + .switch-track { background-color: #4CAF50; }
+        #theme-switch:checked + .switch-track { background-color: #ff9800; }
         #theme-switch:checked + .switch-track .switch-thumb { transform: translateX(26px); }
-
 
         body.dark-mode {
             background-color: #121212;
@@ -151,18 +150,29 @@
         }
 
         body.dark-mode .day-mon { background-color: #fff176; color: #000000; }
-        body.dark-mode .day-tue { background-color: #f06292; color: #000000; }
+        body.dark-mode .day-tue { background-color: #f06292; color: #ffffff; }
         body.dark-mode .day-wed { background-color: #81c784; color: #000000; }
         body.dark-mode .day-thu { background-color: #ffb74d; color: #000000; }
         body.dark-mode .day-fri { background-color: #64b5f6; color: #000000; }
-        body.dark-mode .day-sat { background-color: #ba68c8; color: #000000; }
-        body.dark-mode .day-sun { background-color: #e57373; color: #000000; }
+        body.dark-mode .day-sat { background-color: #ba68c8; color: #ffffff; }
+        body.dark-mode .day-sun { background-color: #e57373; color: #ffffff; }
+
+        .lang-en {
+            display: none;
+        }
+        
+        body.en .lang-th { display: none; }
+        body.en .lang-en { display: inline-block; }
+        body.en th .lang-en { display: block; }
     </style>
 </head>
 <body>
 
     <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1>📅 ระบบจัดตารางเรียน</h1>
+        <h1>
+            <span class="lang-th">📅 ระบบจัดตารางเรียน</span>
+            <span class="lang-en">📅 Schedule Planner</span>
+        </h1>
         <div>
             <button id="lang-toggle">TH | EN</button>
             
@@ -178,19 +188,65 @@
     <hr>
 
     <div class="form-container">
-        <h3>➕ เพิ่มวิชาเรียน / Add Course</h3>
+        <h3>
+            <span class="lang-th">➕ เพิ่มวิชาเรียนใหม่</span>
+            <span class="lang-en">➕ Add New Course</span>
+        </h3>
         
         <div style="margin-bottom: 15px;">
-            <label><input type="radio" name="add-method" checked> กรอกข้อมูลเอง (Manual)</label>
-            <label><input type="radio" name="add-method"> อัปโหลด PDF / วางข้อความ (Auto)</label>
+            <label>
+                <input type="radio" name="add-method" id="method-manual" checked onclick="switchInputMethod()"> 
+                <span class="lang-th">กรอกข้อมูลเอง (Manual)</span>
+                <span class="lang-en">Manual Input</span>
+            </label>
+            <label style="margin-left: 15px;">
+                <input type="radio" name="add-method" id="method-auto" onclick="switchInputMethod()"> 
+                <span class="lang-th">อัปโหลด PDF / วางข้อความ (Auto)</span>
+                <span class="lang-en">Upload PDF / Paste Text</span>
+            </label>
         </div>
 
-        <div id="auto-input-section">
-            <p>วิธีที่ 1: ลากไฟล์ PDF ตารางเรียนมาวางที่นี่</p>
+        <div id="manual-input-section">
+            <input type="text" placeholder="รหัสวิชา / Course ID">
+            <input type="text" placeholder="ชื่อวิชา / Course Name">
+            <br>
+            <label>
+                <span class="lang-th">เวลาเรียน:</span>
+                <span class="lang-en">Time:</span>
+            </label>
+            <input type="time"> <span class="lang-th">ถึง</span><span class="lang-en">to</span> <input type="time">
+            <br>
+            <input type="text" placeholder="สถานที่เรียน / Location">
+            <input type="text" placeholder="หมู่เรียน / Section">
+            
+            <select>
+                <option value="lecture">📖 Lecture (ทฤษฎี)</option>
+                <option value="laboratory">🧪 Laboratory (ปฏิบัติ)</option>
+            </select>
+            <br>
+            <button type="button" style="background-color: #ff9800; color: black; font-weight: bold; margin-top: 10px; font-family: 'Prompt', sans-serif;">
+                <span class="lang-th">เพิ่มลงตาราง</span>
+                <span class="lang-en">Add to Schedule</span>
+            </button>
+        </div>
+
+        <div id="auto-input-section" style="display: none;">
+            <p>
+                <span class="lang-th">วิธีที่ 1: ลากไฟล์ PDF ตารางเรียนมาวางที่นี่</span>
+                <span class="lang-en">Method 1: Drag and drop your schedule PDF here</span>
+            </p>
             <input type="file" accept=".pdf">
             
-            <p style="margin-top: 15px;">วิธีที่ 2: ก๊อปปี้ข้อความตารางเรียนจากเว็บมหาลัยมาวางในกล่องนี้</p>
-            <textarea rows="4" placeholder="วางข้อความที่ก๊อปปี้มาที่นี่... (Paste your schedule text here)" style="width: 100%; box-sizing: border-box;"></textarea>
+            <p style="margin-top: 15px;">
+                <span class="lang-th">วิธีที่ 2: ก๊อปปี้ข้อความตารางเรียนจากเว็บมหาลัยมาวางในกล่องนี้</span>
+                <span class="lang-en">Method 2: Copy and paste your schedule text here</span>
+            </p>
+            <textarea rows="4" placeholder="วางข้อความที่นี่... / Paste text here..." style="width: 100%; box-sizing: border-box; font-family: 'Prompt', sans-serif;"></textarea>
+            <br>
+            <button type="button" style="background-color: #4CAF50; color: white; font-weight: bold; margin-top: 10px; border: none; padding: 8px 12px; border-radius: 4px; font-family: 'Prompt', sans-serif;">
+                <span class="lang-th">ประมวลผลตารางเรียนอัตโนมัติ</span>
+                <span class="lang-en">Process Schedule Automatically</span>
+            </button>
         </div>
     </div>
 
@@ -198,59 +254,48 @@
         <thead>
             <tr>
                 <th>Day/Time</th>
-                <th>08:00</th>
-                <th>09:00</th>
-                <th>10:00</th>
-                <th>11:00</th>
-                <th>12:00</th>
-                <th>13:00</th>
-                <th>14:00</th>
-                <th>15:00</th>
-                <th>16:00</th>
-                <th>17:00</th>
-                <th>18:00</th>
-                <th>19:00</th>
-                <th>20:00</th>
+                <th>08:00</th><th>09:00</th><th>10:00</th><th>11:00</th><th>12:00</th>
+                <th>13:00</th><th>14:00</th><th>15:00</th><th>16:00</th><th>17:00</th>
+                <th>18:00</th><th>19:00</th><th>20:00</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="day-label day-mon">MON</td>
+                <td class="day-label day-mon"><span class="lang-th">จันทร์</span><span class="lang-en">MON</span></td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label day-tue">TUE</td>
+                <td class="day-label day-tue"><span class="lang-th">อังคาร</span><span class="lang-en">TUE</span></td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label day-wed">WED</td>
+                <td class="day-label day-wed"><span class="lang-th">พุธ</span><span class="lang-en">WED</span></td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label day-thu">THU</td>
+                <td class="day-label day-thu"><span class="lang-th">พฤหัสฯ</span><span class="lang-en">THU</span></td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label day-fri">FRI</td>
+                <td class="day-label day-fri"><span class="lang-th">ศุกร์</span><span class="lang-en">FRI</span></td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label day-sat">SAT</td>
+                <td class="day-label day-sat"><span class="lang-th">เสาร์</span><span class="lang-en">SAT</span></td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label day-sun">SUN</td>
+                <td class="day-label day-sun"><span class="lang-th">อาทิตย์</span><span class="lang-en">SUN</span></td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
         </tbody>
     </table>
 
     <script>
+        // 1. ระบบสลับโหมดมืด / สว่าง
         const themeSwitch = document.getElementById('theme-switch');
-
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
-            
             const thumb = document.querySelector('.switch-thumb');
             if (themeSwitch.checked) {
                 thumb.innerText = "🌙";
@@ -258,8 +303,29 @@
                 thumb.innerText = "☀️";
             }
         }
-
         themeSwitch.addEventListener('change', toggleTheme);
+
+        // 2. ระบบสลับแท็บวิธีเพิ่มข้อมูล (Manual / Auto)
+        function switchInputMethod() {
+            const manualSection = document.getElementById('manual-input-section');
+            const autoSection = document.getElementById('auto-input-section');
+            const isManualChecked = document.getElementById('method-manual').checked;
+
+            if (isManualChecked) {
+                manualSection.style.display = 'block';
+                autoSection.style.display = 'none';
+            } else {
+                manualSection.style.display = 'none';
+                autoSection.style.display = 'block';
+            }
+        }
+
+        // 3. ระบบสลับภาษา (TH / EN)
+        const langToggle = document.getElementById('lang-toggle');
+        langToggle.addEventListener('click', () => {
+            // สลับคลาส .en ที่ตัว body
+            document.body.classList.toggle('en');
+        });
     </script>
 </body>
 </html>
