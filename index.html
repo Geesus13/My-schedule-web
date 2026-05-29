@@ -55,8 +55,21 @@
             transition: border-color 0.4s ease;
         }
         .day-label {
-            font-weight: bold;
-            background-color: #f5f5f5;
+            .day-mon { background-color: #fff9c4 !important; color: #000000 !important; }
+            .day-tue { background-color: #f8bbd0 !important; color: #000000 !important; }
+            .day-wed { background-color: #c8e6c9 !important; color: #000000 !important; }
+            .day-thu { background-color: #ffe0b2 !important; color: #000000 !important; }
+            .day-fri { background-color: #bbdefb !important; color: #000000 !important; }
+            .day-sat { background-color: #e1bee7 !important; color: #000000 !important; }
+            .day-sun { background-color: #ffcdd2 !important; color: #000000 !important; }
+            
+            body.dark-mode .day-mon { background-color: #fff176 !important; color: #000000 !important; }
+            body.dark-mode .day-tue { background-color: #f06292 !important; color: #ffffff !important; }
+            body.dark-mode .day-wed { background-color: #81c784 !important; color: #000000 !important; }
+            body.dark-mode .day-thu { background-color: #ffb74d !important; color: #000000 !important; }
+            body.dark-mode .day-fri { background-color: #64b5f6 !important; color: #000000 !important; }
+            body.dark-mode .day-sat { background-color: #ba68c8 !important; color: #ffffff !important; }
+            body.dark-mode .day-sun { background-color: #e57373 !important; color: #ffffff !important; }
         }
         #lang-toggle {
             background-color: #4CAF50;
@@ -137,6 +150,20 @@
             color: white;
             border-color: #444;
         }
+        #auto-input-section {
+            margin-top: 10px; 
+            padding: 15px; 
+            border: 2px dashed #ccc;
+            background-color: #ffffff;
+            color: #333333;
+            border-radius: 8px;
+            transition: all 0.4s ease;
+        }
+        body.dark-mode #auto-input-section {
+            border-color: #555555;
+            background-color: #252525;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -194,31 +221,31 @@
         </thead>
         <tbody>
             <tr>
-                <td class="day-label" style="color: #fff176;">MON</td>
+                <td class="day-label day-mon">MON</td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label" style="color: #f06292;">TUE</td>
+                <td class="day-label day-tue">TUE</td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label" style="color: #81c784;">WED</td>
+                <td class="day-label day-wed">WED</td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label" style="color: #ffb74d;">THU</td>
+                <td class="day-label day-thu">THU</td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label" style="color: #64b5f6;">FRI</td>
+                <td class="day-label day-fri">FRI</td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label" style="color: #ba68c8;">SAT</td>
+                <td class="day-label day-sat">SAT</td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td class="day-label" style="color: #e57373;">SUN</td>
+                <td class="day-label day-sun">SUN</td>
                 <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
         </tbody>
