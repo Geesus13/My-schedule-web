@@ -43,6 +43,7 @@
             color: #333333;
             border: 1px solid #cccccc;
             border-radius: 4px;
+            font-family: 'Karla', sans-serif;
             transition: all 0.4s ease;
         }
 
@@ -54,6 +55,7 @@
             border-radius: 4px;
             cursor: pointer;
             font-family: 'Karla', sans-serif;
+            font-weight: 600;
         }
 
         table {
@@ -69,7 +71,7 @@
             padding: 12px 8px;
             text-align: center;
             min-width: 90px;
-            height: 50px;
+            height: 60px;
             transition: all 0.4s ease;
         }
 
@@ -157,10 +159,7 @@
         body.dark-mode .day-sat { background-color: #ba68c8; color: #000000; }
         body.dark-mode .day-sun { background-color: #e57373; color: #000000; }
 
-        .lang-en {
-            display: none;
-        }
-        
+        .lang-en { display: none; }
         body.en .lang-th { display: none; }
         body.en .lang-en { display: inline-block; }
         body.en th .lang-en { display: block; }
@@ -180,34 +179,40 @@
             transition: all 0.3s ease;
         }
 
-       .btn-manual:hover, .btn-auto:hover {
-           background-color: #388E3C;
-           transform: translateY(-2px);
-           box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
-       }
+        .btn-manual:hover, .btn-auto:hover {
+            background-color: #388E3C;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+        }
 
         .btn-manual:active, .btn-auto:active {
             transform: translateY(1px);
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
-        body.dark-mode .btn-manual, .btn-auto {
+        /* แก้ไขสไตล์ปุ่มเพิ่มวิชาเมื่ออยู่ในโหมดมืด */
+        body.dark-mode .btn-manual, body.dark-mode .btn-auto {
             background-color: #4CAF50;
             color: #000000;
         }
+        body.dark-mode .btn-manual:hover, body.dark-mode .btn-auto:hover {
+            background-color: #388E3C;
+            color: #ffffff;
+        }
 
         .course-card {
-            padding: 4px;
+            padding: 6px;
             border-radius: 6px;
             font-size: 11px;
             font-weight: bold;
             line-height: 1.3;
-            color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1)
+            color: #000000; /* ให้ตัวหนังสือเริ่มต้นเป็นสีดำเพื่อให้ชัดบนพื้นพาสเทล */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             text-align: left;
         }
 
-        body.dark-mode .course {
+        /* เมื่อเปิดโหมดมืด ให้ตัวหนังสือในการ์ดเปลี่ยนเป็นสีดำคมๆ เสมอ เพื่อให้อ่านออกบนพื้นสีสว่าง */
+        body.dark-mode .course-card {
             color: #000000;
         }
     </style>
@@ -253,24 +258,48 @@
         </div>
 
         <div id="manual-input-section">
-            <input type="text" placeholder="รหัสวิชา / Course ID">
-            <input type="text" placeholder="ชื่อวิชา / Course Name">
+            <input type="text" id="course-id" placeholder="รหัสวิชา / Course ID">
+            <input type="text" id="course-name" placeholder="ชื่อวิชา / Course Name">
+            
+            <select id="course-day">
+                <option value="MON">วันจันทร์ / MON</option>
+                <option value="TUE">วันอังคาร / TUE</option>
+                <option value="WED">วันพุธ / WED</option>
+                <option value="THU">วันพฤหัสบดี / THU</option>
+                <option value="FRI">วันศุกร์ / FRI</option>
+                <option value="SAT">วันเสาร์ / SAT</option>
+                <option value="SUN">วันอาทิตย์ / SUN</option>
+            </select>
             <br>
             <label>
                 <span class="lang-th">เวลาเรียน:</span>
                 <span class="lang-en">Time:</span>
             </label>
-            <input type="time"> <span class="lang-th">ถึง</span><span class="lang-en">to</span> <input type="time">
-            <br>
-            <input type="text" placeholder="สถานที่เรียน / Location">
-            <input type="text" placeholder="หมู่เรียน / Section">
-            
-            <select>
-                <option value="lecture">📖 Lecture (ทฤษฎี)</option>
-                <option value="laboratory">🧪 Laboratory (ปฏิบัติ)</option>
+            <select id="course-time">
+                <option value="08">08:00</option>
+                <option value="09">09:00</option>
+                <option value="10">10:00</option>
+                <option value="11">11:00</option>
+                <option value="12">12:00</option>
+                <option value="13">13:00</option>
+                <option value="14">14:00</option>
+                <option value="15">15:00</option>
+                <option value="16">16:00</option>
+                <option value="17">17:00</option>
+                <option value="18">18:00</option>
+                <option value="19">19:00</option>
+                <option value="20">20:00</option>
             </select>
             <br>
-            <button type="button" class="btn-manual">
+            <input type="text" id="course-room" placeholder="สถานที่เรียน / Location">
+            <input type="text" id="course-sec" placeholder="หมู่เรียน / Section">
+            
+            <select id="course-type">
+                <option value="📖 Lecture (ทฤษฎี)">📖 Lecture (ทฤษฎี)</option>
+                <option value="🧪 Laboratory (ปฏิบัติ)">🧪 Laboratory (ปฏิบัติ)</option>
+            </select>
+            <br>
+            <button type="button" class="btn-manual" onclick="addCourseToTable()">
                 <span class="lang-th">เพิ่มลงตาราง</span>
                 <span class="lang-en">Add to Schedule</span>
             </button>
@@ -287,7 +316,7 @@
                 <span class="lang-th">วิธีที่ 2: ก๊อปปี้ข้อความตารางเรียนจากเว็บมหาลัยมาวางในกล่องนี้</span>
                 <span class="lang-en">Method 2: Copy and paste your schedule text here</span>
             </p>
-            <textarea rows="4" placeholder="วางข้อความที่นี่... / Paste text here..." style="width: 100%; box-sizing: border-box; font-family: 'Prompt', sans-serif;"></textarea>
+            <textarea rows="4" placeholder="วางข้อความที่นี่... / Paste text here..." style="width: 100%; box-sizing: border-box; font-family: 'Karla', sans-serif;"></textarea>
             <br>
             <button type="button" class="btn-auto">
                 <span class="lang-th">ประมวลผลตารางเรียนอัตโนมัติ</span>
@@ -320,7 +349,7 @@
             </tr>
             <tr>
                 <td class="day-label day-thu"><span class="lang-th">พฤหัสฯ</span><span class="lang-en">THU</span></td>
-                <td id="THU-08"></td><td id="THU-09"></td><td id="THU-10"></td><td id="THU-11"></td><td id="THU-12"></td><td id="THU-13"></td><td id="THU-14"></td><td id="THU-15"></td><td id="THU-16"></td><td id="THU-17"></td><td id="THU-18"></td><td id="TUE-19"></td><td id="TUE-20"></td>
+                <td id="THU-08"></td><td id="THU-09"></td><td id="THU-10"></td><td id="THU-11"></td><td id="THU-12"></td><td id="THU-13"></td><td id="THU-14"></td><td id="THU-15"></td><td id="THU-16"></td><td id="THU-17"></td><td id="THU-18"></td><td id="THU-19"></td><td id="THU-20"></td>
             </tr>
             <tr>
                 <td class="day-label day-fri"><span class="lang-th">ศุกร์</span><span class="lang-en">FRI</span></td>
@@ -369,6 +398,7 @@
             document.body.classList.toggle('en');
         });
 
+        // 🛠️ แก้ไข: จัดการปีกกาภายในฟังก์ชันเพิ่มวิชาเรียนให้จับคู่เปิด-ปิดถูกต้องเรียบร้อยครับ
         function addCourseToTable() {
             const id = document.getElementById('course-id').value;
             const name = document.getElementById('course-name').value;
@@ -381,7 +411,8 @@
             if (!id || !name) {
                 alert("กรุณากรอกรหัสวิชาและชื่อวิชาด้วยครับ! / Please enter Course ID and Name.");
                 return;
-    }
+            }
+
             const targetCellId = `${day}-${time}`;
             const targetCell = document.getElementById(targetCellId);
             
@@ -391,23 +422,23 @@
                 
                 let colorClass = `day-${day.toLowerCase()}`;
                 courseCard.classList.add(colorClass);
+            
+                courseCard.innerHTML = `
+                    <div><strong>${id}</strong></div>
+                    <div>${name}</div>
+                    <div>Sec: ${sec} | ${room}</div>
+                    <div>${type}</div>
+                `;
+                
+                targetCell.innerHTML = '';
+                targetCell.appendChild(courseCard);
+                
+                // ล้างค่าในหน้าต่างฟอร์มกรอกเงินเพื่อให้พร้อมกรอกวิชาต่อไป
+                document.getElementById('course-id').value = '';
+                document.getElementById('course-name').value = '';
+                document.getElementById('course-room').value = '';
+                document.getElementById('course-sec').value = '';
             }
-            
-            courseCard.innerHTML = `
-                <div><strong>${id}</strong></div>
-                <div>${name}</div>
-                <div>Sec: ${sec} | ${room}</div>
-                <div>${type}</div>
-            `;
-            
-            targetCell.innerHTML = '';
-            targetCell.appendChild(courseCard);
-            
-            document.getElementById('course-id').value = '';
-            document.getElementById('course-name').value = '';
-            document.getElementById('course-room').value = '';
-            document.getElementById('course-sec').value = '';
-            
         }
     </script>        
 </body>
