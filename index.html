@@ -190,7 +190,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
-        /* แก้ไขสไตล์ปุ่มเพิ่มวิชาเมื่ออยู่ในโหมดมืด */
         body.dark-mode .btn-manual, body.dark-mode .btn-auto {
             background-color: #4CAF50;
             color: #000000;
@@ -206,14 +205,53 @@
             font-size: 11px;
             font-weight: bold;
             line-height: 1.3;
-            color: #000000; /* ให้ตัวหนังสือเริ่มต้นเป็นสีดำเพื่อให้ชัดบนพื้นพาสเทล */
+            color: #000000; 
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             text-align: left;
+            margin: 2px 0;
         }
 
-        /* เมื่อเปิดโหมดมืด ให้ตัวหนังสือในการ์ดเปลี่ยนเป็นสีดำคมๆ เสมอ เพื่อให้อ่านออกบนพื้นสีสว่าง */
         body.dark-mode .course-card {
             color: #000000;
+        }
+
+        /* 🌟 สไตล์ของปุ่มเลือกวัน (Checkbox แบบกระดุม) */
+        .day-checkbox-group {
+            display: inline-flex;
+            gap: 6px;
+            margin: 5px;
+            vertical-align: middle;
+        }
+        .day-checkbox-label {
+            padding: 6px 12px;
+            border: 1px solid #cccccc;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            user-select: none;
+            background-color: #ffffff;
+            color: #333333;
+        }
+        .day-checkbox-group input {
+            display: none;
+        }
+        /* เมื่อกดเลือกวันเรียนให้เปลี่ยนเป็นสีเขียว */
+        .day-checkbox-group input:checked + .day-checkbox-label {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+        body.dark-mode .day-checkbox-label {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border-color: #444444;
+        }
+        body.dark-mode .day-checkbox-group input:checked + .day-checkbox-label {
+            background-color: #4CAF50;
+            color: #000000;
+            border-color: #4CAF50;
         }
     </style>
 </head>
@@ -261,36 +299,31 @@
             <input type="text" id="course-id" placeholder="รหัสวิชา / Course ID">
             <input type="text" id="course-name" placeholder="ชื่อวิชา / Course Name">
             
-            <select id="course-day">
-                <option value="MON">วันจันทร์ / MON</option>
-                <option value="TUE">วันอังคาร / TUE</option>
-                <option value="WED">วันพุธ / WED</option>
-                <option value="THU">วันพฤหัสบดี / THU</option>
-                <option value="FRI">วันศุกร์ / FRI</option>
-                <option value="SAT">วันเสาร์ / SAT</option>
-                <option value="SUN">วันอาทิตย์ / SUN</option>
-            </select>
-            <br>
-            <label>
+            <div style="margin: 5px 0;">
+                <label style="margin-left: 5px; font-weight: bold;">วันเรียน / Day:</label>
+                <div class="day-checkbox-group">
+                    <input type="checkbox" id="day-mon" value="MON"><label for="day-mon" class="day-checkbox-label">จ. / MON</label>
+                    <input type="checkbox" id="day-tue" value="TUE"><label for="day-tue" class="day-checkbox-label">อ. / TUE</label>
+                    <input type="checkbox" id="day-wed" value="WED"><label for="day-wed" class="day-checkbox-label">พ. / WED</label>
+                    <input type="checkbox" id="day-thu" value="THU"><label for="day-thu" class="day-checkbox-label">พฤ. / THU</label>
+                    <input type="checkbox" id="day-fri" value="FRI"><label for="day-fri" class="day-checkbox-label">ศ. / FRI</label>
+                    <input type="checkbox" id="day-sat" value="SAT"><label for="day-sat" class="day-checkbox-label">ส. / SAT</label>
+                    <input type="checkbox" id="day-sun" value="SUN"><label for="day-sun" class="day-checkbox-label">อา. / SUN</label>
+                </div>
+            </div>
+
+            <label style="margin-left: 5px;">
                 <span class="lang-th">เวลาเรียน:</span>
                 <span class="lang-en">Time:</span>
             </label>
-            <select id="course-time">
-                <option value="08">08:00</option>
-                <option value="09">09:00</option>
-                <option value="10">10:00</option>
-                <option value="11">11:00</option>
-                <option value="12">12:00</option>
-                <option value="13">13:00</option>
-                <option value="14">14:00</option>
-                <option value="15">15:00</option>
-                <option value="16">16:00</option>
-                <option value="17">17:00</option>
-                <option value="18">18:00</option>
-                <option value="19">19:00</option>
-                <option value="20">20:00</option>
-            </select>
+            <input type="time" id="course-start-time" step="900" value="08:00">
+            <label>
+                <span class="lang-th">ถึง</span>
+                <span class="lang-en">to</span>
+            </label>
+            <input type="time" id="course-end-time" step="900" value="11:00">
             <br>
+            
             <input type="text" id="course-room" placeholder="สถานที่เรียน / Location">
             <input type="text" id="course-sec" placeholder="หมู่เรียน / Section">
             
@@ -398,12 +431,12 @@
             document.body.classList.toggle('en');
         });
 
-        // 🛠️ แก้ไข: จัดการปีกกาภายในฟังก์ชันเพิ่มวิชาเรียนให้จับคู่เปิด-ปิดถูกต้องเรียบร้อยครับ
+        // 🌟 ปรับปรุงฟังก์ชันการคำนวณและกระจายวันอัตโนมัติ
         function addCourseToTable() {
             const id = document.getElementById('course-id').value;
             const name = document.getElementById('course-name').value;
-            const day = document.getElementById('course-day').value;
-            const time = document.getElementById('course-time').value;
+            const startTime = document.getElementById('course-start-time').value;
+            const endTime = document.getElementById('course-end-time').value;
             const room = document.getElementById('course-room').value;
             const sec = document.getElementById('course-sec').value;
             const type = document.getElementById('course-type').value;
@@ -413,32 +446,53 @@
                 return;
             }
 
-            const targetCellId = `${day}-${time}`;
-            const targetCell = document.getElementById(targetCellId);
-            
-            if (targetCell) {
-                const courseCard = document.createElement('div');
-                courseCard.className = 'course-card';
-                
-                let colorClass = `day-${day.toLowerCase()}`;
-                courseCard.classList.add(colorClass);
-            
-                courseCard.innerHTML = `
-                    <div><strong>${id}</strong></div>
-                    <div>${name}</div>
-                    <div>Sec: ${sec} | ${room}</div>
-                    <div>${type}</div>
-                `;
-                
-                targetCell.innerHTML = '';
-                targetCell.appendChild(courseCard);
-                
-                // ล้างค่าในหน้าต่างฟอร์มกรอกเงินเพื่อให้พร้อมกรอกวิชาต่อไป
-                document.getElementById('course-id').value = '';
-                document.getElementById('course-name').value = '';
-                document.getElementById('course-room').value = '';
-                document.getElementById('course-sec').value = '';
+            // ดึงค่าปุ่มวันเรียนทั้งหมดที่ผู้ใช้คลิกเลือก (Multi-select)
+            const checkedDays = [];
+            const dayCheckboxes = document.querySelectorAll('.day-checkbox-group input:checked');
+            dayCheckboxes.forEach(cb => checkedDays.push(cb.value));
+
+            if (checkedDays.length === 0) {
+                alert("กรุณาเลือกวันเรียนอย่างน้อย 1 วันครับ! / Please select at least one day.");
+                return;
             }
+
+            // คำนวณชั่วโมงเริ่มต้นเพื่อเอาไปจับคู่ตำแหน่ง ID ของตาราง (ดึงเลขชั่วโมงหลักหน้า เช่น "09:30" -> "09")
+            const startHour = startTime.split(':')[0];
+
+            // วนลูปกระจายการ์ดวิชาเรียนลงตามวันที่เลือกไว้ทั้งหมด
+            checkedDays.forEach(day => {
+                const targetCellId = `${day}-${startHour}`;
+                const targetCell = document.getElementById(targetCellId);
+                
+                if (targetCell) {
+                    const courseCard = document.createElement('div');
+                    courseCard.className = 'course-card';
+                    
+                    let colorClass = `day-${day.toLowerCase()}`;
+                    courseCard.classList.add(colorClass);
+                
+                    // แสดงเวลาแบบละเอียด (เวลาเริ่ม - เวลาเลิก) ภายในกล่องข้อมูล
+                    courseCard.innerHTML = `
+                        <div><strong>${id}</strong></div>
+                        <div>${name}</div>
+                        <div>⏱️ ${startTime} - ${endTime}</div>
+                        <div>Sec: ${sec} | ${room}</div>
+                        <div>${type}</div>
+                    `;
+                    
+                    targetCell.innerHTML = '';
+                    targetCell.appendChild(courseCard);
+                }
+            });
+
+            // ล้างค่าในฟอร์ม (ยกเว้นเวลาและวัน เพื่อให้ผู้ใช้ปรับแก้ต่อได้สะดวกหากต้องการ)
+            document.getElementById('course-id').value = '';
+            document.getElementById('course-name').value = '';
+            document.getElementById('course-room').value = '';
+            document.getElementById('course-sec').value = '';
+            
+            // ยกเลิกการติ๊กเลือกวันหลังจากบันทึกเสร็จ
+            dayCheckboxes.forEach(cb => cb.checked = false);
         }
     </script>        
 </body>
